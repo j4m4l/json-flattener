@@ -19,16 +19,16 @@ package com.github.wnameless.json.flattener;
 
 /**
  * 
- * {@link Flags} lists all acceptable flags for {@link JsonFlattener}, to change runtime behaviour.
+ * {@link Flag} lists all acceptable flags for {@link JsonFlattener}, to change runtime behaviour.
  * 
  * @author Wei-Ming Wu
  *
  */
-public enum Flags {
+public enum Flag {
 
   /**
-   * Flattens every objects.
+   * Ignores reserved characters in key and does not escape it.
    */
-  IGNORE_SPECIAL_CHARACTER_IN_KEY
+  IGNORE_RESERVED_CHARACTER_IN_KEY
 
 }
