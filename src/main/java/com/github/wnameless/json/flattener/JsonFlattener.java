@@ -30,6 +30,8 @@ import java.util.Deque;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -133,6 +135,7 @@ public final class JsonFlattener {
   private Character leftBracket = '[';
   private Character rightBracket = ']';
   private PrintMode printMode = PrintMode.MINIMAL;
+  private Set<Flag> flags = new HashSet<>;
   private KeyTransformer keyTrans = null;
 
   private JsonFlattener newJsonFlattener(JsonValueBase<?> jsonVal) {
@@ -315,6 +318,18 @@ public final class JsonFlattener {
     this.printMode = notNull(printMode);
     return this;
   }
+  
+  /**
+   * A fluent setter to add a flag to {@link JsonFlattener}.
+   * 
+   * @param flag
+   *          a {@link Flag}
+   * @return this {@link JsonFlattener}
+   */
+  public JsonFlattener withFlag(Flag flag) {
+    this.flags.add(flag);
+    return this;
+  }
 
   /**
    * A fluent setter to setup a {@link KeyTransformer} of the
@@ -488,7 +503,7 @@ public final class JsonFlattener {
             ((Entry<String, ? extends JsonValueBase<?>>) iter.getCurrent())
                 .getKey();
         if (keyTrans != null) key = keyTrans.transform(key);
-        if (hasReservedCharacters(key)) {
+        if (hasReservedCharacters(key) && !flags.contains(Flag.IGNORE_RESERVED_CHARACTER_IN_KEY)) {
           sb.append(leftBracket);
           sb.append('"');
           sb.append(policy.getCharSequenceTranslator().translate(key));
